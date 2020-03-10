@@ -1,0 +1,16 @@
+PODS:
+  - LGYCalendarView (0.0.1)
+
+DEPENDENCIES:
+  - LGYCalendarView (from `../LGYCalendarView.podspec`)
+
+EXTERNAL SOURCES:
+  LGYCalendarView:
+    :path: "../LGYCalendarView.podspec"
+
+SPEC CHECKSUMS:
+  LGYCalendarView: ab0b5bd8b7964a78741346c24df8356de2a393e3
+
+PODFILE CHECKSUM: 7f222b95056ad8f4d21cccf64c1a978284a89398
+
+COCOAPODS: 1.7.4

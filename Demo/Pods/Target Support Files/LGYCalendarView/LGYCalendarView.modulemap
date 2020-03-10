@@ -1,0 +1,6 @@
+framework module LGYCalendarView {
+  umbrella header "LGYCalendarView-umbrella.h"
+
+  export *
+  module * { export * }
+}
