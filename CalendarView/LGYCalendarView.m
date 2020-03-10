@@ -11,7 +11,7 @@
 #import "LGYMonthModel.h"
 
 
-@interface LGYCalendarView ()<UICollectionViewDelegate,UICollectionViewDataSource>
+@interface LGYCalendarView ()<UICollectionViewDelegate,UICollectionViewDataSource,LGYCalendarWeekdayViewDataSource>
 /// weekView
 @property (nonatomic, strong)LGYCalendarWeekdayView *weekView;
 /// collectionView
@@ -123,7 +123,12 @@
         return nil;
     }
 }
-
+#pragma mark - <LGYCalendarWeekdayViewDataSource>
+- (void)calendarWeekdayView:(LGYCalendarWeekdayView *)weekView willConfigWeekdayTitleLabel:(UILabel *)weekTitleLabel forWeekdayIndex:(NSInteger)weekdayIndex {
+    if ([self.dataSource respondsToSelector:@selector(calendarView:willConfigWeekdayTitleLabel:forWeekdayIndex:)]) {
+        [self.dataSource calendarView:self willConfigWeekdayTitleLabel:weekTitleLabel forWeekdayIndex:weekdayIndex];
+    }
+}
 #pragma mark - <UICollectionViewDelegate,UICollectionViewDataSource>
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return self.monthModel.dayModels.count;
@@ -276,6 +281,7 @@
 - (LGYCalendarWeekdayView *)weekView {
     if (!_weekView) {
         LGYCalendarWeekdayView *weekView = [[LGYCalendarWeekdayView alloc] init];
+        weekView.dataSource = self;
         [self addSubview:weekView];
         _weekView = weekView;
     }

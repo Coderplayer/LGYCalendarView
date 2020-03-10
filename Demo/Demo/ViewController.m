@@ -93,6 +93,7 @@
     calendar.delegate = self;
     calendar.dateHeight = 36;
     calendar.dateRowSpacing = 5;
+    calendar.firstWeekday = 1;
     calendar.weekdayTitles = @[@"Mon",@"Tue",@"Wen",@"Thu",@"Fri",@"Sat",@"Sun"];
 //    calendar.monthInsert = UIEdgeInsetsMake(5, 0, 5, 0);
     CGFloat height = [calendar estimateCalendarViewHeight];
@@ -165,6 +166,17 @@
     cell.dateLabel.textColor = textColor;
     cell.dateLabel.font = [UIFont systemFontOfSize:18];
     return cell;
+}
+
+- (void)calendarView:(LGYCalendarView *)calendarView willConfigWeekdayTitleLabel:(UILabel *)weekTitleLabel forWeekdayIndex:(NSInteger)weekdayIndex {
+    weekTitleLabel.font = [UIFont systemFontOfSize:16];
+    NSLog(@"-----%zd",weekdayIndex);
+    if (weekdayIndex == 1 || weekdayIndex == 7) {
+        weekTitleLabel.textColor = [UIColor lightGrayColor];
+    }else {
+        weekTitleLabel.textColor = [UIColor blackColor];
+    }
+    
 }
 
 - (void)calendarView:(LGYCalendarView *)calendarView didSelectDayModel:(nonnull LGYDayModel *)dayModel atIndex:(NSInteger)index {

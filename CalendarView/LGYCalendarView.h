@@ -16,6 +16,12 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol LGYCalendarViewDataSource <NSObject>
 @optional
 - (LGYBaseCalendarCell *)calendarView:(LGYCalendarView *)calendarView cellforDateAtIndex:(NSInteger)index withDayModel:(LGYDayModel *)dayModel;
+
+/// 配置日历的头部 即星期视图中label的相关属性字体、颜色
+/// @param calendarView 日历控件
+/// @param weekTitleLabel 星期视图中的一个label
+/// @param weekdayIndex  该label对应星期的索引，与系统一致 周日：1，周一：2，....... 周六：7
+- (void)calendarView:(LGYCalendarView *)calendarView willConfigWeekdayTitleLabel:(UILabel *)weekTitleLabel forWeekdayIndex:(NSInteger)weekdayIndex;
 @end
 
 @protocol LGYCalendarViewDelegate <NSObject>
@@ -57,7 +63,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// 下个月出现在本月的天数
 @property (nonatomic, assign, readonly) NSInteger nextMonthPlaceDaysCount;
 
-
 /// 注册日历控件中日期cell
 - (void)registeCalendarCellClass:(nonnull Class)calendarCellClass;
 /// 根据日期模型返回期cell
@@ -83,7 +88,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// 刷新日期
 - (void)refresh;
 
-/// 设置日历状态并滚动日历
+/// 设置日历显示模式并滚动日历
 - (void)setScopeType:(LGYCalendarViewScopeType)scopeType toIndex:(NSInteger)index;
 
 @end

@@ -15,8 +15,6 @@
 @implementation LGYCalendarWeekdayView
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        _weekdayFont = [UIFont systemFontOfSize:14];
-        _weekdayColor = [UIColor blackColor];
         [self setupSubviews];
     }
     return self;
@@ -25,14 +23,17 @@
 - (void)setupSubviews {
     _labelPointers = [NSPointerArray weakObjectsPointerArray];
     _weekdayTitles = @[@"周一",@"周二",@"周三",@"周四",@"周五",@"周六",@"周日"];
+    
+    UIFont *font = [UIFont systemFontOfSize:14];
+    UIColor *color = [UIColor blackColor];
     for (NSInteger i = 0; i < 7; i ++) {
         UILabel *label = [[UILabel alloc] init];
+        label.textColor = color;
+        label.font = font;
         label.textAlignment = NSTextAlignmentCenter;
         [self addSubview:label];
         [_labelPointers addPointer:(__bridge void *)label];
     }
-    
-    [self configureAppearance];
 }
 
 
@@ -51,16 +52,6 @@
 
 - (NSArray<UILabel *> *)weekdayLabels {
     return _labelPointers.allObjects;
-}
-
-- (void)setWeekdayFont:(UIFont *)weekdayFont {
-    _weekdayFont = weekdayFont;
-    [self configureAppearance];
-}
-
-- (void)setWeekdayColor:(UIColor *)weekdayColor {
-    _weekdayColor = weekdayColor;
-    [self configureAppearance];
 }
 
 - (void)setWeekdayTitles:(NSArray *)weekdayTitles {
@@ -86,10 +77,13 @@
     NSInteger firstWeekday = self.calendar.firstWeekday;
     for (NSInteger i = 0; i < self.labelPointers.count; i ++) {
         UILabel *label = [self.labelPointers pointerAtIndex:i];
-        label.font = _weekdayFont;
-        label.textColor = _weekdayColor;
-        NSInteger weekdayIndex = (i + 7 + firstWeekday - 2) % 7;
-        label.text = [_weekdayTitles objectAtIndex:weekdayIndex];
+        NSInteger weekdayTitleIndex = (i + 7 + firstWeekday - 2) % 7;
+        label.text = [_weekdayTitles objectAtIndex:weekdayTitleIndex];
+        if ([self.dataSource respondsToSelector:@selector(calendarWeekdayView:willConfigWeekdayTitleLabel:forWeekdayIndex:)]) {
+            NSInteger weekdayIndex = (i + firstWeekday) % 7;
+            weekdayIndex = weekdayIndex ? weekdayIndex : 7;
+            [self.dataSource calendarWeekdayView:self willConfigWeekdayTitleLabel:label forWeekdayIndex:weekdayIndex];
+        }
     }
 }
 

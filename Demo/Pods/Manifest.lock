@@ -1,5 +1,5 @@
 PODS:
-  - LGYCalendarView (0.0.1)
+  - LGYCalendarView (1.0.1)
 
 DEPENDENCIES:
   - LGYCalendarView (from `../LGYCalendarView.podspec`)
@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: "../LGYCalendarView.podspec"
 
 SPEC CHECKSUMS:
-  LGYCalendarView: ab0b5bd8b7964a78741346c24df8356de2a393e3
+  LGYCalendarView: 6d69677e1f9425a8848e5e95bc09286a467a5236
 
 PODFILE CHECKSUM: 7f222b95056ad8f4d21cccf64c1a978284a89398
 

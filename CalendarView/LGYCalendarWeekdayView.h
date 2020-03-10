@@ -9,13 +9,15 @@
 #import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
-//static NSInteger const kLGYPerWeekDaysCount = 7;
+@class LGYCalendarWeekdayView;
+@protocol LGYCalendarWeekdayViewDataSource <NSObject>
+- (void)calendarWeekdayView:(LGYCalendarWeekdayView *)weekView willConfigWeekdayTitleLabel:(UILabel *)weekTitleLabel forWeekdayIndex:(NSInteger)weekdayIndex;
+@end
 
 @interface LGYCalendarWeekdayView : UIView
-/// weekdayFont
-@property (nonatomic, strong) UIFont *weekdayFont;
-/// weekdayColor
-@property (nonatomic, strong) UIColor *weekdayColor;
+/// 数据源
+@property (nonatomic, weak) id<LGYCalendarWeekdayViewDataSource> dataSource;
+
 /// weekdayLabels
 @property (nonatomic, strong, readonly) NSArray <UILabel *>*weekdayLabels;
 /// weekdayTitles
