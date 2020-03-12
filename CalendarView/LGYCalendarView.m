@@ -116,6 +116,18 @@
 }
 
 
+- (NSDate *)dateAtIndex:(NSInteger)index {
+    return [self.monthModel dateAtIndex:index];
+}
+
+- (NSString *)weekdayTitleAtIndex:(NSInteger)index {
+    if (index < self.monthModel.dayModels.count) {
+        return [self.weekView weekdayTitleOfColumn:index % 7];
+    }else {
+        return @"";
+    }
+}
+
 - (LGYDayModel *)dayModelAtIndex:(NSInteger)index {
     if (index < self.monthModel.dayModels.count) {
         return [self.monthModel.dayModels objectAtIndex:index];
@@ -123,9 +135,12 @@
         return nil;
     }
 }
+- (void)clickDateAtIndex:(NSInteger)index {
+    [self collectionView:_collectionView didSelectItemAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
+}
 #pragma mark - <LGYCalendarWeekdayViewDataSource>
 - (void)calendarWeekdayView:(LGYCalendarWeekdayView *)weekView willConfigWeekdayTitleLabel:(UILabel *)weekTitleLabel forWeekdayIndex:(NSInteger)weekdayIndex {
-    if ([self.dataSource respondsToSelector:@selector(calendarView:willConfigWeekdayTitleLabel:forWeekdayIndex:)]) {
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(calendarView:willConfigWeekdayTitleLabel:forWeekdayIndex:)]) {
         [self.dataSource calendarView:self willConfigWeekdayTitleLabel:weekTitleLabel forWeekdayIndex:weekdayIndex];
     }
 }
@@ -135,13 +150,13 @@
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    LGYDayModel *day = [self.monthModel.dayModels objectAtIndex:indexPath.item];
     LGYBaseCalendarCell *cell;
-    if ([self.dataSource respondsToSelector:@selector(calendarView:cellforDateAtIndex:withDayModel:)]) {
-        cell = [self.dataSource calendarView:self cellforDateAtIndex:indexPath.item withDayModel:day];
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(calendarView:cellforDateAtIndex:)]) {
+        cell = [self.dataSource calendarView:self cellforDateAtIndex:indexPath.item];
     }else {
         cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"kLGYBaseCalendarCellID" forIndexPath:indexPath];
     }
+    LGYDayModel *day = [self.monthModel.dayModels objectAtIndex:indexPath.item];
     cell.dateLabel.text = [NSString stringWithFormat:@"%zd",day.dayNum];
     if (_onlyShowCurrentMonthDate && (day.monthType != LGYDayModelMonthTypeCurrent)) {
         cell.dateLabel.hidden = YES;
@@ -149,6 +164,12 @@
         cell.dateLabel.hidden = NO;
     }
     return cell;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(calendarView:willDisplayDateCell:forDateAtIndex:)]) {
+        [self.dataSource calendarView:self willDisplayDateCell:(LGYBaseCalendarCell *)cell forDateAtIndex:indexPath.item];
+    }
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -167,15 +188,22 @@
 }
 
 #pragma mark - setter
+- (void)setDataSource:(id<LGYCalendarViewDataSource>)dataSource {
+    _dataSource = dataSource;
+    [self refresh];
+}
+
 - (NSCalendar *)calendar {
     return self.monthModel.calendar;
 }
 
 - (void)setFirstWeekday:(NSInteger)firstWeekday {
     self.calendar.firstWeekday = firstWeekday;
+    if (self.displayMonth) {
+        [self.monthModel cacluateMonthDatas];
+        [self refresh];;
+    }
     [self.weekView configureAppearance];
-    [self.monthModel cacluateMonthDatas];
-    [self.collectionView reloadData];
 }
 
 - (NSInteger)firstWeekday {
@@ -204,7 +232,7 @@
     _dateRowSpacing = dateRowSpacing;
     _flowLayout.minimumLineSpacing = dateRowSpacing;
     self.monthInsert = UIEdgeInsetsMake(dateRowSpacing, 0, dateRowSpacing, 0);
-    [self.collectionView reloadData];
+    [self refresh];;
 }
 
 - (void)setMonthInsert:(UIEdgeInsets)monthInsert {
@@ -215,12 +243,12 @@
 
 - (void)setOnlyShowCurrentMonthDate:(BOOL)onlyShowCurrentMonthDate {
     _onlyShowCurrentMonthDate = onlyShowCurrentMonthDate;
-    [self.collectionView reloadData];
+    [self refresh];;
 }
 
 - (void)setDisplayMonth:(NSDate *)displayMonth {
     self.monthModel.displayMonth = displayMonth;
-    [self.collectionView reloadData];
+    [self refresh];
     [self.collectionView setContentOffset:CGPointZero animated:NO];
 }
 
@@ -232,7 +260,7 @@
     if (_scopeType != scopeType) {
         _scopeType = scopeType;
         self.flowLayout.scopeType = scopeType;
-        [self.collectionView reloadData];
+        [self refresh];;
     }
 }
 

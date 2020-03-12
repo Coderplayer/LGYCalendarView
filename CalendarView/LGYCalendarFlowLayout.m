@@ -25,10 +25,13 @@
         //获取每个section的cell个数
         NSUInteger count = [self.collectionView numberOfItemsInSection:sec];
         NSInteger rows = count / 7;
+        CGFloat height = self.sectionInset.top + self.sectionInset.bottom; //基准高度
         if (self.scopeType == LGYCalendarViewScopeMonth) {
-            self.contentSize = collectionSize;
+            height += self.itemSize.height * rows + self.minimumLineSpacing * (rows - 1);
+            self.contentSize = CGSizeMake(collectionSize.width, height);
         }else {
-            self.contentSize = CGSizeMake(collectionSize.width * rows, collectionSize.height);
+            height += self.itemSize.height;
+            self.contentSize = CGSizeMake(collectionSize.width * rows, height);
         }
         for (NSUInteger item = 0; item<count; item++) {
             NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:sec];

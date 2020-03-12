@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface LGYBaseCalendarCell : UICollectionViewCell
 /// label
 @property (nonatomic, strong) UILabel *dateLabel;
+- (void)setupSubviews;
 @end
 
 NS_ASSUME_NONNULL_END

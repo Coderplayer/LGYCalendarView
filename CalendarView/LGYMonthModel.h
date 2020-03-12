@@ -22,9 +22,9 @@ typedef NS_ENUM(NSUInteger, LGYDayModelMonthType) {
 };
 @interface LGYDayModel : NSObject
 /// 对应天的阳历数字
-@property (nonatomic, assign) NSInteger dayNum;
+@property (nonatomic, assign, readonly) NSInteger dayNum;
 /// 该日期所属月份类型
-@property (nonatomic, assign) LGYDayModelMonthType monthType;
+@property (nonatomic, assign, readonly) LGYDayModelMonthType monthType;
 /// 对应的日期
 @property (nonatomic, strong) NSDate *date;
 /// 对应星期几
@@ -43,11 +43,11 @@ typedef NS_ENUM(NSUInteger, LGYDayModelMonthType) {
 @property (nonatomic, strong) NSDate *displayMonth;
 /// 当月日期有几行
 @property (nonatomic, assign, readonly) NSInteger dateRows;
-/// 上个月出现在本月的天数
+/// 当前展示月份的上个月出现在本月的天数
 @property (nonatomic, assign, readonly) NSInteger lastMonthPlaceDaysCount;
-/// 本月有几天
+/// 当前展示月份有几天
 @property (nonatomic, assign, readonly) NSInteger currentMonthDaysCount;
-/// 下个月出现在本月的天数
+/// 当前展示月份的下个月出现在本月的天数
 @property (nonatomic, assign, readonly) NSInteger nextMonthPlaceDaysCount;
 /// 当前余份包含的日期模型<包含前一个和后一个月出现在当月的日期>
 @property (nonatomic, copy) NSArray <LGYDayModel *> *dayModels;

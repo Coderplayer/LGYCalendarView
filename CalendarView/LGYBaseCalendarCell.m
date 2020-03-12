@@ -12,8 +12,13 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         [self dateLabel];
+        [self setupSubviews];
     }
     return self;
+}
+
+- (void)setupSubviews {
+    
 }
 
 - (void)layoutSubviews {

@@ -7,6 +7,13 @@
 //
 
 #import "LGYMonthModel.h"
+@interface LGYDayModel ()
+/// 对应天的阳历数字
+@property (nonatomic, assign) NSInteger dayNum;
+/// 该日期所属月份类型
+@property (nonatomic, assign) LGYDayModelMonthType monthType;
+@end
+
 @implementation LGYDayModel
 - (instancetype)initWithDayNum:(NSInteger)dayNum monthType:(LGYDayModelMonthType)monthType {
     if (self = [super init]) {
@@ -52,7 +59,9 @@
 
 /// 计算月份相关数据
 - (void)cacluateMonthDatas {
-
+    if (!self.displayMonth) {
+        return;
+    }
     NSInteger currentMonthDaysCount = [self.calendar lgy_numberOfdaysInMonth:_displayMonth];
     _currentMonthDaysCount = currentMonthDaysCount;
     

@@ -157,8 +157,9 @@
     
 }
 
-- (LGYBaseCalendarCell *)calendarView:(LGYCalendarView *)calendarView cellforDateAtIndex:(NSInteger)index withDayModel:(LGYDayModel *)dayModel {
+- (LGYBaseCalendarCell *)calendarView:(LGYCalendarView *)calendarView cellforDateAtIndex:(NSInteger)index {
     LGYBaseCalendarCell *cell = [calendarView dequeueReusableCalendarCellClass:[LGYBaseCalendarCell class] atIndex:index];
+    LGYDayModel *dayModel = [calendarView dayModelAtIndex:index];
     UIColor *textColor = (dayModel.monthType == LGYDayModelMonthTypeCurrent) ? [UIColor blackColor] : [UIColor lightGrayColor];
     if (index == self.selectIndex) {
         textColor = [UIColor redColor];
